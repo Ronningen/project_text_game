@@ -6,11 +6,11 @@ import model
 PATH = ""  # FIXME
 
 
-def deserialise() -> model.world:
+def deserialise() -> model.World:
     """Выгружает из системного файла состояние мира и инициализирует его.
     returns: world в состоянии на момент последнего выхода из игры."""
     # FIXME
-    return model.world()
+    return model.World()
 
 
 def serialise(world):
