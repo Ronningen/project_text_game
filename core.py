@@ -78,13 +78,15 @@ class Game(Window):
             if event.key == '':  # text key
                 pass  # FIXME обработка процесса ввода команды
             if event.key == '':  # enter key
-                pass  # FIXME обработка окончания ввода команды и передача команды в модель
+                # FIXME обработка окончания ввода команды и передача команды в модель
+                formated_command, responce = self.world.dispatch_command("") 
+                self.view.add_command(formated_command)
+                self.view.add_responce(responce)
 
     def update(self):
         super().update()
         self.world.update()
-        self.screen.fill((0, 0, 0))
-        self.view.update('')  # FIXME надо передавать данные на вывод
+        self.view.update()
 
 
 class StartMenu(Window):
