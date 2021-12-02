@@ -1,9 +1,32 @@
 """
-Главный модуль модели игры, содержащая мир, героя и все механики  
+Главный модуль модели игры, содержащая мир, героя и все механики.
 """
 
 
-from typing import Tuple
+class GameObject():
+    """
+    Базовый класс всех игровых объектов
+    """
+    def __init__(self, description: str) -> None:
+        self.description = description
+
+    def descript(self) -> str:
+        """
+        Возвращает текстовое описание.
+        """
+        return self.description
+
+
+class Location(GameObject):
+    def __init__(self, description: str, objects) -> None:
+        super().__init__(description)
+        self.objects = objects
+
+class Door(GameObject):
+    def __init__(self, description: str, enter_location: Location, aim_location: Location) -> None:
+        super().__init__(description)
+        self.enter_location = enter_location
+        self.aim_location = aim_location
 
 
 class World:  # FIXME
@@ -12,25 +35,27 @@ class World:  # FIXME
     """
 
     def __init__(self) -> None:
-        pass # FIXME
-
-    def update(self):
         """
-        Выполняет запрошенные команды, обновляет состояние объектов, продвигает сцену вперед по сюжету.
+        Реализует игровое наполнение, вызывает создание персонажа и начинает тутуориал.
         """
-        pass # FIXME
+        self.locations = []
+        self.doors = []
+        self.hero = []
+        self.inventory = []
+        # FIXME реализует игровое наполнение, 
 
-    def dispatch_command(cmd: str):
+    def dispatch_command(command: str):
         """
         Отдает миру команду для какого-то действия.
         Принимает строку, пытается распознать в ней вызов какой-то заранее заданой команды и вызывает соответсвующий метод.
         Если команда не была распознана, должен вызывать сообщение о некоректности команды.
         Примеры предполагаемых команд: осмотреться, просмотреть свой инвентарь, ударить врага и т.д.
+        Выполняет распознанную команду, изменяя соответсующие мир.
         - в качестве фичи можно преобразовывать ввод игрока во что-то стилизованное под запись в дневнике.
 
         returns: кортеж двух строк - (отформатированная команда, ответ игры на команду)
         """
-        formated_command = "" # запись введенной команды в нужном формате
-        responce = "" # ответ игры
+        formated_command = ""  # запись введенной команды в нужном формате
+        responce = ""  # ответ игры
         # FIXME
         return (formated_command, responce)
