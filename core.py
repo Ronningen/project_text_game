@@ -15,8 +15,8 @@ WIDTH, HEIGHT = 400, 400
 
 class Window:
     """
-    Базовый класс, управляющий активным окном pygame
-    Содержит и отображает экземпляры view.WindowElement - список controls
+    Базовый класс, управляющий активным окном pygame.
+    Содержит и отображает экземпляры view.WindowElement - список controls.
     """
 
     def __init__(self, screen, clock) -> None:
@@ -85,7 +85,6 @@ class Game(Window):
 
     def update(self):
         super().update()
-        self.world.update()
         self.view.update()
 
 
