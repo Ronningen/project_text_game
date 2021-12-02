@@ -5,8 +5,9 @@
 
 class GameObject():
     """
-    Базовый класс всех игровых объектов
+    Базовый класс всех игровых объектов.
     """
+
     def __init__(self, description: str) -> None:
         self.description = description
 
@@ -18,11 +19,20 @@ class GameObject():
 
 
 class Location(GameObject):
+    """
+    Локация, в которой разворачиваются события, в которой игрок может находить предметы, загадки, врагов.
+    """
+
     def __init__(self, description: str, objects) -> None:
         super().__init__(description)
         self.objects = objects
 
+
 class Door(GameObject):
+    """
+    Основная дверь, просто связывает между собой две локации.
+    """
+
     def __init__(self, description: str, enter_location: Location, aim_location: Location) -> None:
         super().__init__(description)
         self.enter_location = enter_location
@@ -40,9 +50,13 @@ class World:  # FIXME
         """
         self.locations = []
         self.doors = []
+
         self.hero = []
         self.inventory = []
-        # FIXME реализует игровое наполнение, 
+        
+        self.current_location = None
+        self.current_doors = []
+        # FIXME
 
     def dispatch_command(command: str):
         """
