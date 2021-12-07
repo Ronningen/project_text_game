@@ -76,7 +76,7 @@ class Game(Window):
         if event.type == pygame.QUIT:
             data.serialise(self.world)
         elif event.type == pygame.KEYDOWN:
-            if event.key == '':  # text key
+            if self.temp_finish and event.key == '':  # text key
                 pass  # FIXME обработка процесса ввода команды
             if event.key == '':  # enter key
                 # FIXME обработка окончания ввода команды и передача команды в модель
