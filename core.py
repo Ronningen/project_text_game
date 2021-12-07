@@ -75,8 +75,8 @@ class Game(Window):
         super().handle(event)
         if event.type == pygame.QUIT:
             data.serialise(self.world)
-        elif event.type == pygame.KEYDOWN:
-            if self.temp_finish and event.key == '':  # text key
+        elif self.temp_finish and event.type == pygame.KEYDOWN:
+            if event.key == '':  # text key
                 pass  # FIXME обработка процесса ввода команды
             if event.key == '':  # enter key
                 # FIXME обработка окончания ввода команды и передача команды в модель
@@ -85,7 +85,7 @@ class Game(Window):
                 self.view.add_responce(responce)
                 if len(command_list) > 0:
                     for cmd in command_list:
-                        button = view.Button(screen, (), self.temp_button_func(cmd[0]), cmd[1])
+                        button = view.Button(screen, (0,0,0,0), self.temp_button_func(cmd[0]), cmd[1]) # FIXME - сделать кнопкам ректанглы
                         self.controls.append(button)
                         self.temp_finish.append(button)
 
