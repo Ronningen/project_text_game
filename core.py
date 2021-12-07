@@ -37,6 +37,7 @@ class Window:
         """
         Обновляет активное окно (элемент screen) в ходе главного цикла, не вызывая pygame.display.update().
         """
+        screen.fill((0,0,0))
         for control in self.controls:
             control.focus(pygame.mouse.get_pos())
             control.show()
@@ -67,25 +68,43 @@ class Game(Window):
         super().__init__(screen, clock)
         self.world = data.deserialise()
         self.view = view.GameView(screen)
+        self.temp_finish = False # флаг о необходимости удаления всех временных кнопок с окна
+        self.temp_controls = []
 
     def handle(self, event):
         super().handle(event)
         if event.type == pygame.QUIT:
             data.serialise(self.world)
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            pass  # FIXME обработка выбора команд и передача команды в модель
         elif event.type == pygame.KEYDOWN:
             if event.key == '':  # text key
                 pass  # FIXME обработка процесса ввода команды
             if event.key == '':  # enter key
                 # FIXME обработка окончания ввода команды и передача команды в модель
-                formated_command, responce = self.world.dispatch_command("") 
+                formated_command, responce, command_list = self.world.dispatch_command("вставить строку команды игрока сюда") 
                 self.view.add_command(formated_command)
                 self.view.add_responce(responce)
+                if len(command_list) > 0:
+                    for cmd in command_list:
+                        button = view.Button(screen, (), self.temp_button_func(cmd[0]), cmd[1])
+                        self.controls.append(button)
+                        self.temp_finish.append(button)
+
+    def temp_button_func(self, func):
+        """
+        Нажатие на временную кнопку должно стирать все временные кнопки
+        """
+        func()
+        self.temp_finish = True
 
     def update(self):
         super().update()
         self.view.update()
+        if self.temp_finish:
+            self.temp_finish = False
+            for control in self.temp_controls:
+                self.controls.remove(control)
+            self.temp_controls.clear()
+            
 
 
 class StartMenu(Window):
@@ -94,6 +113,9 @@ class StartMenu(Window):
     """
 
     def start_game(self):
+        """
+        Открывает окно игры, скрывая меню соответсвенно. По закрытию окна игры снова появляется меню.
+        """
         game = Game(self.screen, self.clock)
         game.mainloop()
 
