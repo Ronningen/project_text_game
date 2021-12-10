@@ -10,7 +10,7 @@ import model
 import data
 
 
-WIDTH, HEIGHT = 400, 400
+WIDTH, HEIGHT = 800, 600
 
 
 class Window:
@@ -75,19 +75,22 @@ class Game(Window):
         super().handle(event)
         if event.type == pygame.QUIT:
             data.serialise(self.world)
-        elif self.temp_finish and event.type == pygame.KEYDOWN:
-            if event.key == '':  # text key
-                pass  # FIXME обработка процесса ввода команды
-            if event.key == '':  # enter key
+#        elif self.temp_finish and event.type == pygame.KEYDOWN:
+        elif event.type == pygame.KEYDOWN:
+            print(str(event.key))
+            if event.key == pygame.K_a:  # text key
+#                pass  # FIXME обработка процесса ввода команды
+                print("kek")
+            if event.key == 'K_b':  # enter key
                 # FIXME обработка окончания ввода команды и передача команды в модель
-                formated_command, responce, command_list = self.world.dispatch_command("вставить строку команды игрока сюда") 
-                self.view.add_command(formated_command)
-                self.view.add_responce(responce)
+                formatted_command, response, command_list = self.world.dispatch_command("вставить строку команды игрока сюда") 
+                self.view.add_command(formatted_command)
+                self.view.add_response(response)
                 if len(command_list) > 0:
                     for cmd in command_list:
                         button = view.Button(screen, (0,0,0,0), self.temp_button_func(cmd[0]), cmd[1]) # FIXME - сделать кнопкам ректанглы
                         self.controls.append(button)
-                        self.temp_finish.append(button)
+                        self.temp_controls.append(button)
 
     def temp_button_func(self, func):
         """
@@ -122,7 +125,7 @@ class StartMenu(Window):
     def __init__(self, screen, clock) -> None:
         super().__init__(screen, clock)
         start_button = view.Button(
-            screen, (10, 10, WIDTH-20, 60), self.start_game, "start game")
+            screen, (10, 10, screen.get_width() - 20, 60), self.start_game, "start game")
         self.controls.append(start_button)
 
 
