@@ -70,6 +70,7 @@ class Game(Window):
         self.view = view.GameView(screen)
         self.temp_finish = False # флаг о необходимости удаления всех временных кнопок с окна
         self.temp_controls = []
+        self.command_text = ''
 
     def handle(self, event):
         super().handle(event)
@@ -77,20 +78,22 @@ class Game(Window):
             data.serialise(self.world)
 #        elif self.temp_finish and event.type == pygame.KEYDOWN:
         elif event.type == pygame.KEYDOWN:
-            print(str(event.key))
-            if event.key == pygame.K_a:  # text key
-#                pass  # FIXME обработка процесса ввода команды
-                print("kek")
-            if event.key == 'K_b':  # enter key
-                # FIXME обработка окончания ввода команды и передача команды в модель
-                formatted_command, response, command_list = self.world.dispatch_command("вставить строку команды игрока сюда") 
+            if event.key == pygame.K_RETURN:
+                formatted_command, response, command_list = self.world.dispatch_command(self.command_text)
                 self.view.add_command(formatted_command)
                 self.view.add_response(response)
+                i = 2
                 if len(command_list) > 0:
                     for cmd in command_list:
-                        button = view.Button(screen, (0,0,0,0), self.temp_button_func(cmd[0]), cmd[1]) # FIXME - сделать кнопкам ректанглы
+                        i -= 1
+                        button = view.Button(screen, (100*i,100*i,100,100), lambda: self.temp_button_func(cmd[0]), cmd[1]) # FIXME - сделать кнопкам ректанглы
                         self.controls.append(button)
                         self.temp_controls.append(button)
+                self.command_text = ''
+            elif event.key == pygame.K_BACKSPACE:
+                self.command_text = self.command_text[:-1]
+            else:
+                self.command_text += event.unicode
 
     def temp_button_func(self, func):
         """
@@ -107,7 +110,7 @@ class Game(Window):
             for control in self.temp_controls:
                 self.controls.remove(control)
             self.temp_controls.clear()
-            
+
 
 
 class StartMenu(Window):

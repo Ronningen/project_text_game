@@ -58,7 +58,7 @@ class World:  # FIXME
         self.current_doors = []
         # FIXME
 
-    def dispatch_command(command: str):
+    def dispatch_command(self, command: str):
         """
         Отдает миру команду для какого-то действия.
         Принимает строку, пытается распознать в ней вызов какой-то заранее заданой команды и вызывает соответсвующий метод.
@@ -71,8 +71,11 @@ class World:  # FIXME
          - (отформатированная команда, ответ игры на команду, список дальнейших команд в виде кортежей текста и метода)
         Если дальнейшая команда произвольна и должна быть введена с клавиатуры, то список команд пуст.
         """
-        formatted_command = ""  # запись введенной команды в нужном формате
-        response = ""  # ответ игры
-        cmdlist = [()] # лист команд c элементом в виде (команда, текст)
+        print(command, "<-- from model")
+
+        formatted_command = command  # запись введенной команды в нужном формате
+        response = "Хорошая работа! Теперь нажмите на любую из кнопок - они одинаковы"  # ответ игры
+        command_list = [(lambda: print("Класс! Ничего, что я через терминал?"),"Кнопка 1"),
+                        (lambda: print("Класс! Ничего, что я через терминал?"),"Кнопка 2")]
         # FIXME
-        return (formatted_command, response, cmdlist)
+        return (formatted_command, response, command_list)

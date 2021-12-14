@@ -38,13 +38,11 @@ class Button(WindowElement):
         if self.focused:
             pygame.draw.rect(self.screen, (100, 100, 100), self.rect)  # FIXME
             text_surface = FONT.render(self.text, 1, (255,255,255))
-            text_rect = text_surface.get_rect(center = (self.rect.width/2, self.rect.height/2))
-            self.screen.blit(text_surface, text_rect)
         else:
             pygame.draw.rect(self.screen, (30, 30, 30), self.rect)
             text_surface = FONT.render(self.text, 1, (80,80,80))
-            text_rect = text_surface.get_rect(center = (self.rect.width/2, self.rect.height/2))
-            self.screen.blit(text_surface, text_rect)
+        text_rect = text_surface.get_rect(center = self.rect.center)
+        self.screen.blit(text_surface, text_rect)
 
     def call_action(self):
         """
@@ -57,7 +55,7 @@ class Button(WindowElement):
 class GameView:
     def __init__(self, screen: pygame.Surface) -> None:
         self.screen = screen
-        self.textlines = ["ase ng;oega'i ;goahrg;oaer gauerguieaher;g- ----=-------- -------","b","c","d"]
+        self.textlines = ["Привет! Введите любой текст и нажмите ENTER"]
 #пара рандомных текстовых полей для теста
         # FIXME - продумать необходимые для работы поля
         # разобраться с колвом текста
