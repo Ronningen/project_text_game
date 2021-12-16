@@ -90,6 +90,40 @@ class World:
             self.command_list = [Command(run, "убежать."),
                             Command(fight, "готовиться к битве."),]
 
+        elif check_one("взя", "подн", "схват", "бра"):
+            self.formatted_command += "Я решил подобрать "
+            objects = self.current_location.objects
+            picked_object = ""
+            for object in objects:
+                marker = object.get_marker()
+                if check_one(marker):
+                    marked_objects = []
+                    for marked_object in objects:
+                        if marked_object.get_marker() == marker:
+                            marked_objects.append(marked_object)
+                    if len(marked_objects) > 1:
+                        for marked_object in objects:
+                            if check_one(marked_object.get_place()):
+                                picked_object = marked_object
+                                break
+                        if picked_object != "":
+                            break
+                        self.formatted_command += marker + ","
+                        self.response += "но не определился конкретно. Надо тщательнее выбрать."
+                    else:
+                        picked_object = object
+            if picked_object != "":
+                self.formatted_command += picked_object.get_description() + "."
+                self.response += "Буду носить его с собой."
+                self.inventory.append(picked_object.delocate())
+                self.current_location.objects.remove(picked_object)
+            else:
+                self.formatted_command += "что-то, "
+                self.response += "но еще не решил что именно."
+            
+            
+            
+
         else:
             self.response += """Опять заболела голова. Кажется, я слышу какие-то голоса... 
             Ничего не понимаю. Надо взять себя в руки."""
@@ -132,7 +166,7 @@ class World:
         self.formatted_command = ""  # форматированная команда для записи с историю
         self.command_list = []
 
-        self.locations = [Location("Какая-то темная комната.")]
+        self.locations = [Location("Какая-то темная комната.", [LocatedObject("крутой меч", "меч", "на стене")])]
         self.doors = []
 
         self.hero = []
@@ -151,7 +185,7 @@ class GameObject():
     def __init__(self, description: str, marker: str  = "") -> None:
         """
         marker - имя объекта, по которому к нему нужно обращаться в игре.
-        description - подробное описание объекта.
+        description - подробное описание объекта, в нем объект должен называться только как marker.
         """
         self.description = description
         self.marker = marker
@@ -168,9 +202,15 @@ class LocatedObject(GameObject):
     Объект в локации. Дополнительно хранит свое положение на локации.
     """
 
-    def __init__(self, description: str, place: str) -> None:
-        super().__init__(description)
+    def __init__(self, description: str, marker: str, place: str = "") -> None:
+        super().__init__(description, marker)
         self.place = place
+
+    def get_place(self):
+        return self.place
+
+    def delocate(self):
+        return super()
 
 
 class Location(GameObject):
@@ -183,8 +223,12 @@ class Location(GameObject):
         self.objects = objects
 
     def get_description(self) -> str:
-        return super().get_description()
-        # FIXME вывести описание объектов
+        full_description = super().get_description()
+        if len(self.objects) > 0:
+            full_description += " В ней есть: "
+            for o in self.objects:
+                full_description += o.get_description() + " " + o.get_place()
+        return full_description
 
 
 class Bridge(GameObject):
