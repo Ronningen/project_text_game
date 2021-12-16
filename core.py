@@ -78,10 +78,7 @@ class Game(Window):
         elif not self.temp_buttons_active and event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
                 if not self.input_text == '':
-                    command_list = self.world.dispatch_command(self.input_text)
-                    if len(command_list) > 0:
-                        self.temp_buttons_active = True
-                        self.add_temp_buttons(command_list)
+                    self.world.dispatch_command(self.input_text)
                     self.input_text = ''
             elif event.key == pygame.K_BACKSPACE:
                 self.input_text = self.input_text[:-1]
@@ -109,6 +106,10 @@ class Game(Window):
         response = self.world.get_response()
         if response and response != 'None':
             self.view.add_response(response)
+        command_list = self.world.get_command_list()
+        if len(command_list) > 0:
+            self.temp_buttons_active = True
+            self.add_temp_buttons(command_list)
            
     def add_temp_buttons(self, command_list):
         top = view.buttonrow_top

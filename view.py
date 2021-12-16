@@ -5,7 +5,7 @@ import pygame
 
 WIDTH, HEIGHT = 800, 600
 FONT = pygame.font.SysFont("Arial", 20)
-textlines_number = 8
+textlines_number = 20
 text_screen_portion = .8
 textlines_width = WIDTH
 textlines_height = HEIGHT * text_screen_portion/textlines_number
@@ -59,7 +59,7 @@ class Button(WindowElement):
 class GameView:
     def __init__(self, screen: pygame.Surface) -> None:
         self.screen = screen
-        self.textlines = ["Привет! Введите любой текст и нажмите ENTER"]
+        self.textlines = []
         # FIXME - продумать необходимые для работы поля
         # разобраться с колвом текста
 
