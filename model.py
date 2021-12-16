@@ -59,10 +59,10 @@ class World:  # FIXME
 
     def __init__(self) -> None:
         """
-        Реализует игровое наполнение, вызывает создание персонажа и начинает тутуориал.
+        Реализует игровое наполнение, вызывает создание персонажа и начинает туториал.
         """
         self.response = "" #ответ для записи в историю
-        self.formatted_command = "" #форматированная команда для записи с историю
+        self.formatted_command = "" #форматированная команда для записи в историю
 
         self.locations = []
         self.doors = []
@@ -74,7 +74,7 @@ class World:  # FIXME
         self.current_doors = []
         # FIXME
 
-    
+
     def get_response(self):
         """
         Отдает ответ, при этом уничтожая его копию у себя.
@@ -105,7 +105,7 @@ class World:  # FIXME
         """
 
         self.formatted_command += command  # запись введенной команды в нужном формате
-        self.response += "Хорошая работа! Теперь нажмите на любую из кнопок - они одинаковы"  # ответ игры
+        self.response += "Хорошая работа! Теперь нажмите на любую из кнопок - они одинаковы СЛАВА АЛЛАХУ СЛАВА АЛЛАХУ СЛАВА АЛЛАХУ СЛАВА АЛЛАХУ СЛАВА АЛЛАХУ СЛАВА АЛЛАХУ СЛАВА АЛЛАХУ СЛАВА АЛЛАХУ СЛАВА АЛЛАХУ СЛАВА АЛЛАХУ "  # ответ игры
         command_list = [self.create_command(lambda: print("Класс! Ничего, что я через терминал?"), "Кнопка 1"),
                         self.create_command(lambda: print("Класс! Ничего, что я через терминал?"), "Кнопка 2")]
         # FIXME
@@ -117,7 +117,7 @@ class World:  # FIXME
         При этом изменяет функцию так, что ее результат записывается в поле self.message этого World.
         Забрать из этого World поле self.message можно с помощью метода get_messege().
         """
-        def func_with_responce():
+        def func_with_response():
             self.formatted_command += name
             self.response += str(func())
-        return Command(func_with_responce, name)
+        return Command(func_with_response, name)

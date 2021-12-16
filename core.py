@@ -109,7 +109,7 @@ class Game(Window):
         response = self.world.get_response()
         if response and response != 'None':
             self.view.add_response(response)
-           
+
     def add_temp_buttons(self, command_list):
         top = view.buttonrow_top
         width = view.textlines_width/len(command_list)
@@ -126,8 +126,8 @@ class Game(Window):
         self.temp_buttons_chosen = False
         for control in self.temp_controls:
             self.controls.remove(control)
-        self.temp_controls.clear() 
-        
+        self.temp_controls.clear()
+
 
 class StartMenu(Window):
     """

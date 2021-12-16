@@ -61,15 +61,15 @@ class GameView:
         self.screen = screen
         self.textlines = ["Привет! Введите любой текст и нажмите ENTER"]
         # FIXME - продумать необходимые для работы поля
-        # разобраться с колвом текста
 
     def add_command(self, command_text: str):
         """
         Добовнляет новый абазац c текстом команды игрока в историю.
         Метод работает только с полями класса, ничего не отрисовывает.
         """
-        self.textlines.append(command_text)
-        if len(self.textlines) > textlines_number:
+        new_textlines = self.distribute_text(command_text)
+        self.textlines += new_textlines
+        while len(self.textlines) > textlines_number:
             self.textlines.pop(0)
         # FIXME
 
@@ -78,8 +78,9 @@ class GameView:
         Добовнляет новый абазац с текстом ответы игры в историю.
         Метод работает только с полями класса, ничего не отрисовывает.
         """
-        self.textlines.append(response_text)
-        if len(self.textlines) > textlines_number:
+        new_textlines = self.distribute_text(response_text)
+        self.textlines += new_textlines
+        while len(self.textlines) > textlines_number:
             self.textlines.pop(0)
         # FIXME
 
@@ -88,6 +89,16 @@ class GameView:
         topleft = (0, textlines_height*(textlines_number + 1))
         textlines_rect = textlines_surface.get_rect(topleft = topleft)
         self.screen.blit(textlines_surface, textlines_rect)
+
+    def distribute_text(self, text):
+        textlines = ['']
+        i=0
+        for word in text.split():
+            textlines[-1] += word + " "
+            if FONT.render(textlines[-1], 1, (255,255,255)).get_rect().width > textlines_width:
+                textlines[-1] = textlines[-1].rsplit(word, 1)[0]
+                textlines.append(word + " ")
+        return textlines
 
     def update(self):
         """
@@ -105,6 +116,4 @@ class GameView:
             topleft = (0, textlines_height*(textlines_number - i - 1))
             textlines_rect = textlines_surface.get_rect(topleft = topleft)
             self.screen.blit(textlines_surface, textlines_rect)
-#        render buttons
-#        render imput window
 #        FIXME
