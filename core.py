@@ -77,7 +77,7 @@ class Game(Window):
             data.serialise(self.world)
         elif not self.temp_buttons_active and event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
-                command_list = self.world.dispatch_command(self.command_text)
+                command_list = self.world.dispatch_command(self.input_text)
                 if len(command_list) > 0:
                     self.temp_buttons_active = True
                     self.add_temp_buttons(command_list)
