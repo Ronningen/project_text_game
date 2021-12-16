@@ -56,9 +56,9 @@ class GameView:
     def __init__(self, screen: pygame.Surface) -> None:
         self.screen = screen
         self.textlines = ["Привет! Введите любой текст и нажмите ENTER"]
-#пара рандомных текстовых полей для теста
         # FIXME - продумать необходимые для работы поля
         # разобраться с колвом текста
+
     def add_command(self, command_text: str):
         """
         Добовнляет новый абазац c текстом команды игрока в историю.
@@ -68,6 +68,7 @@ class GameView:
         if len(self.textlines) > textlines_number:
             self.textlines.pop(0)
         # FIXME
+
     def add_response(self, response_text: str):
         """
         Добовнляет новый абазац с текстом ответы игры в историю.
@@ -78,11 +79,17 @@ class GameView:
             self.textlines.pop(0)
         # FIXME
 
-    def update(self):
+    def blit_input_text(self, input_text):
         w = self.screen.get_width()
         h = self.screen.get_height()
-        textline_width = w
-        textline_height = h * text_screen_portion/textlines_number
+        textlines_width = w
+        textlines_height = h * text_screen_portion/textlines_number
+        textlines_surface = FONT.render(input_text, 1, (255,255,255))
+        topleft = (0, textlines_height*(textlines_number + 1))
+        textlines_rect = textlines_surface.get_rect(topleft = topleft)
+        self.screen.blit(textlines_surface, textlines_rect)
+
+    def update(self):
         """
         Выводит информацию СНИЗУ-ВВЕРХ:  оставляя место для кнопок
             Сначала выводит поле интеракции с игроком (поле ввода текста или список действий для выбора),
@@ -93,11 +100,16 @@ class GameView:
 
         Здесь же реализуются прочие визуальные и звуковые эффекты.
         """  # тут же, если будет нужен, вывод состояния героя и или инвенторя
+        w = self.screen.get_width()
+        h = self.screen.get_height()
+        textlines_width = w
+        textlines_height = h * text_screen_portion/textlines_number
+
         for i in range(len(self.textlines)):
-            textline_surface = FONT.render(self.textlines[-i-1], 1, (255,255,255))
-            a = (0, textline_height*(textlines_number - i))
-            textline_rect = textline_surface.get_rect(topleft = a)
-            self.screen.blit(textline_surface, textline_rect)
+            textlines_surface = FONT.render(self.textlines[-i-1], 1, (255,255,255))
+            topleft = (0, textlines_height*(textlines_number - i - 1))
+            textlines_rect = textlines_surface.get_rect(topleft = topleft)
+            self.screen.blit(textlines_surface, textlines_rect)
 #        render buttons
 #        render imput window
 #        FIXME

@@ -71,7 +71,7 @@ class Game(Window):
         self.temp_buttons_active = False
         self.temp_buttons_chosen = False
         self.temp_controls = []
-        self.command_text = ''
+        self.input_text = ''
 
     def handle(self, event):
         super().handle(event)
@@ -80,23 +80,31 @@ class Game(Window):
         elif not self.temp_buttons_active and event.type == pygame.KEYDOWN:
 #        elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
-                formatted_command, response, command_list = self.world.dispatch_command(self.command_text)
+                formatted_command, response, command_list = self.world.dispatch_command(self.input_text)
                 self.view.add_command(formatted_command)
                 self.view.add_response(response)
-                i = 2
                 if len(command_list) > 0:
+                    temp_buttons_number = len(command_list)
                     self.temp_buttons_active = True
+                    w = self.screen.get_width()
+                    h = self.screen.get_height()
+                    textlines_width = w
+                    textlines_height = h * view.text_screen_portion/view.textlines_number
                     for cmd in command_list:
-                        i -= 1
-                        button = view.Button(screen, (100*i,100*i,100,100), lambda: self.temp_button_func(cmd[0]), cmd[1]) # FIXME - сделать кнопкам ректанглы
+                        i = command_list.index(cmd)
+                        width = w/temp_buttons_number
+                        height = textlines_height
+                        left = width*i
+                        top = height*view.textlines_number
+                        button = view.Button(screen, (left,top,width,height), lambda: self.temp_button_func(cmd[0]), cmd[1]) # FIXME - сделать кнопкам ректанглы
                         self.controls.append(button)
                         self.temp_controls.append(button)
                         print(len(self.controls))
-                self.command_text = ''
+                self.input_text = ''
             elif event.key == pygame.K_BACKSPACE:
-                self.command_text = self.command_text[:-1]
+                self.input_text = self.input_text[:-1]
             else:
-                self.command_text += event.unicode
+                self.input_text += event.unicode
 
     def temp_button_func(self, func):
         """
@@ -108,6 +116,7 @@ class Game(Window):
     def update(self):
         super().update()
         self.view.update()
+        self.view.blit_input_text(self.input_text)
         if self.temp_buttons_chosen:
             self.temp_buttons_active = False
             self.temp_buttons_chosen = False
