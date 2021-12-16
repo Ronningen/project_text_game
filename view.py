@@ -91,13 +91,14 @@ class GameView:
         self.screen.blit(textlines_surface, textlines_rect)
 
     def distribute_text(self, text):
-        textlines = ['']
-        i=0
-        for word in text.split():
-            textlines[-1] += word + " "
-            if FONT.render(textlines[-1], 1, (255,255,255)).get_rect().width > textlines_width:
-                textlines[-1] = textlines[-1].rsplit(word, 1)[0]
-                textlines.append(word + " ")
+        textlines = []
+        for line in text.split("\n"):
+            textlines.append('')
+            for word in line.split():
+                textlines[-1] += word + " "
+                if FONT.render(textlines[-1], 1, (255,255,255)).get_rect().width > textlines_width:
+                    textlines[-1] = textlines[-1].rsplit(word, 1)[0]
+                    textlines.append(word + " ")
         return textlines
 
     def update(self):
