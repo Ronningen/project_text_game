@@ -10,8 +10,6 @@ import model
 import data
 
 
-WIDTH, HEIGHT = 800, 600
-
 
 class Window:
     """
@@ -78,28 +76,13 @@ class Game(Window):
         if event.type == pygame.QUIT:
             data.serialise(self.world)
         elif not self.temp_buttons_active and event.type == pygame.KEYDOWN:
-#        elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
                 formatted_command, response, command_list = self.world.dispatch_command(self.input_text)
                 self.view.add_command(formatted_command)
                 self.view.add_response(response)
                 if len(command_list) > 0:
-                    temp_buttons_number = len(command_list)
                     self.temp_buttons_active = True
-                    w = self.screen.get_width()
-                    h = self.screen.get_height()
-                    textlines_width = w
-                    textlines_height = h * view.text_screen_portion/view.textlines_number
-                    for cmd in command_list:
-                        i = command_list.index(cmd)
-                        width = w/temp_buttons_number
-                        height = textlines_height
-                        left = width*i
-                        top = height*view.textlines_number
-                        button = view.Button(screen, (left,top,width,height), lambda: self.temp_button_func(cmd[0]), cmd[1]) # FIXME - сделать кнопкам ректанглы
-                        self.controls.append(button)
-                        self.temp_controls.append(button)
-                        print(len(self.controls))
+                    self.add_temp_buttons(command_list)
                 self.input_text = ''
             elif event.key == pygame.K_BACKSPACE:
                 self.input_text = self.input_text[:-1]
@@ -118,13 +101,25 @@ class Game(Window):
         self.view.update()
         self.view.blit_input_text(self.input_text)
         if self.temp_buttons_chosen:
-            self.temp_buttons_active = False
-            self.temp_buttons_chosen = False
-            for control in self.temp_controls:
-                self.controls.remove(control)
-            self.temp_controls.clear()
+            self.remove_temp_buttons()
 
+    def add_temp_buttons(self, command_list):
+        top = view.buttonrow_top
+        width = view.textlines_width/len(command_list)
+        height = view.textlines_height
+        for cmd in command_list:
+            i = command_list.index(cmd)
+            left = width*i
+            button = view.Button(self.screen, (left,top,width,height), lambda: self.temp_button_func(cmd[0]), cmd[1])
+            self.controls.append(button)
+            self.temp_controls.append(button)
 
+    def remove_temp_buttons(self):
+        self.temp_buttons_active = False
+        self.temp_buttons_chosen = False
+        for control in self.temp_controls:
+            self.controls.remove(control)
+        self.temp_controls.clear()
 
 class StartMenu(Window):
     """
@@ -145,7 +140,7 @@ class StartMenu(Window):
         self.controls.append(start_button)
 
 
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+screen = pygame.display.set_mode((view.WIDTH, view.HEIGHT))
 clock = pygame.time.Clock()
 menu = StartMenu(screen, clock)
 menu.mainloop()

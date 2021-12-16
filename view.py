@@ -3,9 +3,13 @@
 """
 import pygame
 
+WIDTH, HEIGHT = 800, 600
 FONT = pygame.font.SysFont("Arial", 20)
 textlines_number = 8
 text_screen_portion = .8
+textlines_width = WIDTH
+textlines_height = HEIGHT * text_screen_portion/textlines_number
+buttonrow_top = HEIGHT * text_screen_portion
 
 
 class WindowElement:
@@ -80,10 +84,6 @@ class GameView:
         # FIXME
 
     def blit_input_text(self, input_text):
-        w = self.screen.get_width()
-        h = self.screen.get_height()
-        textlines_width = w
-        textlines_height = h * text_screen_portion/textlines_number
         textlines_surface = FONT.render(input_text, 1, (255,255,255))
         topleft = (0, textlines_height*(textlines_number + 1))
         textlines_rect = textlines_surface.get_rect(topleft = topleft)
@@ -100,11 +100,6 @@ class GameView:
 
         Здесь же реализуются прочие визуальные и звуковые эффекты.
         """  # тут же, если будет нужен, вывод состояния героя и или инвенторя
-        w = self.screen.get_width()
-        h = self.screen.get_height()
-        textlines_width = w
-        textlines_height = h * text_screen_portion/textlines_number
-
         for i in range(len(self.textlines)):
             textlines_surface = FONT.render(self.textlines[-i-1], 1, (255,255,255))
             topleft = (0, textlines_height*(textlines_number - i - 1))
