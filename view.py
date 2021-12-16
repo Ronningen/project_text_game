@@ -40,7 +40,7 @@ class Button(WindowElement):
         В пределах rect кнопки рисует ее в зависимимости от того, наведена ли мышь на кнопку или нет - focused.
         """
         if self.focused:
-            pygame.draw.rect(self.screen, (100, 100, 100), self.rect)  # FIXME
+            pygame.draw.rect(self.screen, (100, 100, 100), self.rect)
             text_surface = FONT.render(self.text, 1, (255, 255, 255))
         else:
             pygame.draw.rect(self.screen, (30, 30, 30), self.rect)

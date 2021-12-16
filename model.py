@@ -106,8 +106,9 @@ class World:  # FIXME
 
         self.formatted_command += command  # запись введенной команды в нужном формате
         self.response += "Хорошая работа! Теперь нажмите на любую из кнопок - они одинаковы"  # ответ игры
-        command_list = [self.create_command(lambda: print("Класс! Ничего, что я через терминал?"), "Кнопка 1"),
-                        self.create_command(lambda: print("Класс! Ничего, что я через терминал?"), "Кнопка 2")]
+        command_list = [self.create_command(lambda: '', "первое ничего"),
+                        self.create_command(lambda: '', "второе ничего"),
+                        self.create_command(lambda: '', "третье ничего")]
         # FIXME
         return command_list
 
