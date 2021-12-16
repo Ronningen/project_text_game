@@ -62,9 +62,9 @@ class Game(Window):
     Основное окно игры.
     """
 
-    def __init__(self, screen, clock) -> None:
+    def __init__(self, screen, clock, world) -> None:
         super().__init__(screen, clock)
-        self.world = data.deserialise()
+        self.world = world
         self.view = view.GameView(screen)
         self.temp_buttons_active = False #флаг активности выбора команды - ручной ввод запрещен если True
         self.temp_buttons_chosen = False #флаг события нажатия кнопки - True если кнопка была нажата - кнопки должны быть стеры если True
@@ -78,10 +78,7 @@ class Game(Window):
         elif not self.temp_buttons_active and event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
                 if not self.input_text == '':
-                    command_list = self.world.dispatch_command(self.input_text)
-                    if len(command_list) > 0:
-                        self.temp_buttons_active = True
-                        self.add_temp_buttons(command_list)
+                    self.world.dispatch_command(self.input_text)
                     self.input_text = ''
             elif event.key == pygame.K_BACKSPACE:
                 self.input_text = self.input_text[:-1]
@@ -109,7 +106,11 @@ class Game(Window):
         response = self.world.get_response()
         if response and response != 'None':
             self.view.add_response(response)
-
+        command_list = self.world.get_command_list()
+        if len(command_list) > 0:
+            self.temp_buttons_active = True
+            self.add_temp_buttons(command_list)
+           
     def add_temp_buttons(self, command_list):
         top = view.buttonrow_top
         width = view.textlines_width/len(command_list)
@@ -134,17 +135,38 @@ class StartMenu(Window):
     Стартовое меню приложения, первым появляется на экране.
     """
 
-    def start_game(self):
+    def start_new_game(self):
         """
         Открывает окно игры, скрывая меню соответсвенно. По закрытию окна игры снова появляется меню.
         """
-        game = Game(self.screen, self.clock)
+        game = Game(self.screen, self.clock, model.World())
+        game.mainloop()
+        self.world = data.deserialise()
+        if isinstance(self.world, model.World):
+            button_y = len(self.controls)*80
+            continue_button = view.Button(
+                screen, (10, button_y, screen.get_width() - 20, 60), self.continue_game, "Продолжить игру")
+            self.controls.append(continue_button)
+
+    def continue_game(self):
+        """
+        Открывает окно предыдущей игры, скрывая меню соответсвенно. По закрытию окна игры снова появляется меню.
+        """
+        game = Game(self.screen, self.clock, self.world)
         game.mainloop()
 
     def __init__(self, screen, clock) -> None:
         super().__init__(screen, clock)
+        self.world = data.deserialise()
+
+        button_y = 10
+        if isinstance(self.world, model.World):
+            continue_button = view.Button(
+                screen, (10, button_y, screen.get_width() - 20, 60), self.continue_game, "Продолжить игру")
+            self.controls.append(continue_button)
+            button_y += 70
         start_button = view.Button(
-            screen, (10, 10, screen.get_width() - 20, 60), self.start_game, "start game")
+            screen, (10, button_y, screen.get_width() - 20, 60), self.start_new_game, "Начать новую игру")
         self.controls.append(start_button)
 
 

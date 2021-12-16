@@ -5,7 +5,7 @@ import pygame
 
 WIDTH, HEIGHT = 800, 600
 FONT = pygame.font.SysFont("Arial", 20)
-textlines_number = 8
+textlines_number = 20
 text_screen_portion = .8
 textlines_width = WIDTH
 textlines_height = HEIGHT * text_screen_portion/textlines_number
@@ -40,7 +40,7 @@ class Button(WindowElement):
         В пределах rect кнопки рисует ее в зависимимости от того, наведена ли мышь на кнопку или нет - focused.
         """
         if self.focused:
-            pygame.draw.rect(self.screen, (100, 100, 100), self.rect)  # FIXME
+            pygame.draw.rect(self.screen, (100, 100, 100), self.rect)
             text_surface = FONT.render(self.text, 1, (255, 255, 255))
         else:
             pygame.draw.rect(self.screen, (30, 30, 30), self.rect)
@@ -59,7 +59,7 @@ class Button(WindowElement):
 class GameView:
     def __init__(self, screen: pygame.Surface) -> None:
         self.screen = screen
-        self.textlines = ["Привет! Введите любой текст и нажмите ENTER"]
+        self.textlines = []
         # FIXME - продумать необходимые для работы поля
 
     def add_command(self, command_text: str):
