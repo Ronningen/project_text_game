@@ -119,15 +119,14 @@ class World:
                 self.current_location.objects.remove(picked_object)
             else:
                 self.formatted_command += "что-то, "
-                self.response += "но еще не решил что именно."
-            
-            
+                self.response += "но еще не решил что именно.
             
 
         else:
             self.response += """Опять заболела голова. Кажется, я слышу какие-то голоса... 
             Ничего не понимаю. Надо взять себя в руки."""
-
+            
+            
     def get_response(self):
         """
         Отдает ответ, при этом уничтожая его копию у себя.

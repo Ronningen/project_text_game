@@ -127,8 +127,8 @@ class Game(Window):
         self.temp_buttons_chosen = False
         for control in self.temp_controls:
             self.controls.remove(control)
-        self.temp_controls.clear() 
-        
+        self.temp_controls.clear()
+
 
 class StartMenu(Window):
     """
