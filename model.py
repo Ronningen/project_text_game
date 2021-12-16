@@ -2,6 +2,19 @@
 Главный модуль модели игры, содержащая мир, героя и все механики.
 """
 
+class Command():
+    """
+    Инкапсуляция функции и ее названия.
+    """
+    def __init__(self, func, name) -> None:
+        self.func = func
+        self.name = name
+
+    def get_func(self):
+        return self.func
+
+    def get_name(self):
+        return self.name
 
 class GameObject():
     """
@@ -48,15 +61,35 @@ class World:  # FIXME
         """
         Реализует игровое наполнение, вызывает создание персонажа и начинает тутуориал.
         """
+        self.response = "" #ответ для записи в историю
+        self.formatted_command = "" #форматированная команда для записи с историю
+
         self.locations = []
         self.doors = []
 
         self.hero = []
         self.inventory = []
-        
+
         self.current_location = None
         self.current_doors = []
         # FIXME
+
+    
+    def get_response(self):
+        """
+        Отдает ответ, при этом уничтожая его копию у себя.
+        """
+        response = self.response
+        self.response = ""
+        return response
+
+    def get_command(self):
+        """
+        Отдает текст команды, при этом уничтожая его копию у себя.
+        """
+        formatted_command = self.formatted_command
+        self.formatted_command = ""
+        return formatted_command
 
     def dispatch_command(self, command: str):
         """
@@ -67,14 +100,24 @@ class World:  # FIXME
         Выполняет распознанную команду, изменяя соответсующие мир.
         - в качестве фичи можно преобразовывать ввод игрока во что-то стилизованное под запись в дневнике.
 
-        returns: кортеж трех объектов: двух строк и одного списка кортежей
-         - (отформатированная команда, ответ игры на команду, список дальнейших команд в виде кортежей текста и метода)
+        returns: список дальнейших команд.
         Если дальнейшая команда произвольна и должна быть введена с клавиатуры, то список команд пуст.
         """
 
-        formatted_command = command  # запись введенной команды в нужном формате
-        response = "Хорошая работа! Теперь нажмите на любую из кнопок - они одинаковы"  # ответ игры
-        command_list = [(lambda: print("Класс! Ничего, что я через терминал?"),"Кнопка 1"),
-                        (lambda: print("Класс! Ничего, что я через терминал?"),"Кнопка 2")]
+        self.formatted_command += command  # запись введенной команды в нужном формате
+        self.response += "Хорошая работа! Теперь нажмите на любую из кнопок - они одинаковы"  # ответ игры
+        command_list = [self.create_command(lambda: print("Класс! Ничего, что я через терминал?"), "Кнопка 1"),
+                        self.create_command(lambda: print("Класс! Ничего, что я через терминал?"), "Кнопка 2")]
         # FIXME
-        return (formatted_command, response, command_list)
+        return command_list
+
+    def create_command(self, func, name):
+        """
+        Инкапсулирует функцию и ее название.
+        При этом изменяет функцию так, что ее результат записывается в поле self.message этого World.
+        Забрать из этого World поле self.message можно с помощью метода get_messege().
+        """
+        def func_with_responce():
+            self.formatted_command += name
+            self.response += str(func())
+        return Command(func_with_responce, name)

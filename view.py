@@ -37,11 +37,11 @@ class Button(WindowElement):
         """
         if self.focused:
             pygame.draw.rect(self.screen, (100, 100, 100), self.rect)  # FIXME
-            text_surface = FONT.render(self.text, 1, (255,255,255))
+            text_surface = FONT.render(self.text, 1, (255, 255, 255))
         else:
             pygame.draw.rect(self.screen, (30, 30, 30), self.rect)
-            text_surface = FONT.render(self.text, 1, (80,80,80))
-        text_rect = text_surface.get_rect(center = self.rect.center)
+            text_surface = FONT.render(self.text, 1, (80, 80, 80))
+        text_rect = text_surface.get_rect(center=self.rect.center)
         self.screen.blit(text_surface, text_rect)
 
     def call_action(self):
@@ -113,4 +113,3 @@ class GameView:
 #        render buttons
 #        render imput window
 #        FIXME
-
