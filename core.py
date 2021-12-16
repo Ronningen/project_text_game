@@ -68,7 +68,8 @@ class Game(Window):
         super().__init__(screen, clock)
         self.world = data.deserialise()
         self.view = view.GameView(screen)
-        self.temp_finish = False # флаг о необходимости удаления всех временных кнопок с окна
+        self.temp_buttons_active = False
+        self.temp_buttons_chosen = False
         self.temp_controls = []
         self.command_text = ''
 
@@ -76,19 +77,21 @@ class Game(Window):
         super().handle(event)
         if event.type == pygame.QUIT:
             data.serialise(self.world)
-#        elif self.temp_finish and event.type == pygame.KEYDOWN:
-        elif event.type == pygame.KEYDOWN:
+        elif not self.temp_buttons_active and event.type == pygame.KEYDOWN:
+#        elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
                 formatted_command, response, command_list = self.world.dispatch_command(self.command_text)
                 self.view.add_command(formatted_command)
                 self.view.add_response(response)
                 i = 2
                 if len(command_list) > 0:
+                    self.temp_buttons_active = True
                     for cmd in command_list:
                         i -= 1
                         button = view.Button(screen, (100*i,100*i,100,100), lambda: self.temp_button_func(cmd[0]), cmd[1]) # FIXME - сделать кнопкам ректанглы
                         self.controls.append(button)
                         self.temp_controls.append(button)
+                        print(len(self.controls))
                 self.command_text = ''
             elif event.key == pygame.K_BACKSPACE:
                 self.command_text = self.command_text[:-1]
@@ -100,13 +103,14 @@ class Game(Window):
         Нажатие на временную кнопку должно стирать все временные кнопки
         """
         func()
-        self.temp_finish = True
+        self.temp_buttons_chosen = True
 
     def update(self):
         super().update()
         self.view.update()
-        if self.temp_finish:
-            self.temp_finish = False
+        if self.temp_buttons_chosen:
+            self.temp_buttons_active = False
+            self.temp_buttons_chosen = False
             for control in self.temp_controls:
                 self.controls.remove(control)
             self.temp_controls.clear()
