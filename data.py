@@ -1,10 +1,9 @@
 """
 Модуль для сериализации и десериализации игрового прогресса между входами и выходами из программы. 
 """
-import pickle
 
+import pickle
 import model
-import json
 
 
 
@@ -29,4 +28,4 @@ def serialise(world):
         pickle.dump(world, f)
 
 
-    # проверить работоспособностьgit
+    # проверить работоспособность git
