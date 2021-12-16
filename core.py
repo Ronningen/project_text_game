@@ -51,11 +51,11 @@ class Window:
         finished = False
         while not finished:
             clock.tick(30)
-            self.update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     finished = True
                 self.handle(event)
+            self.update()
             pygame.display.update()
 
 
@@ -68,8 +68,8 @@ class Game(Window):
         super().__init__(screen, clock)
         self.world = data.deserialise()
         self.view = view.GameView(screen)
-        self.temp_buttons_active = False
-        self.temp_buttons_chosen = False
+        self.temp_buttons_active = False #флаг активности выбора команды - ручной ввод запрещен если True
+        self.temp_buttons_chosen = False #флаг события нажатия кнопки - True если кнопка была нажата - кнопки должны быть стеры если True
         self.temp_controls = []
         self.command_text = ''
 
@@ -78,17 +78,15 @@ class Game(Window):
         if event.type == pygame.QUIT:
             data.serialise(self.world)
         elif not self.temp_buttons_active and event.type == pygame.KEYDOWN:
-#        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RETURN:
-                formatted_command, response, command_list = self.world.dispatch_command(self.command_text)
-                self.view.add_command(formatted_command)
-                self.view.add_response(response)
+            if event.key == pygame.K_RETURN: # FIXME - не нужно что-то делать, если команда - пустая строка
+                command_list = self.world.dispatch_command(self.command_text)
                 i = 2
                 if len(command_list) > 0:
                     self.temp_buttons_active = True
                     for cmd in command_list:
                         i -= 1
-                        button = view.Button(screen, (100*i,100*i,100,100), lambda: self.temp_button_func(cmd[0]), cmd[1]) # FIXME - сделать кнопкам ректанглы
+                        button = view.Button(screen, (100*i,100*i,100,100), self.temp_button_func(cmd.get_func()), cmd.get_name())
+                        # FIXME - вывод кнопок должен не мешать текту
                         self.controls.append(button)
                         self.temp_controls.append(button)
                         print(len(self.controls))
@@ -100,10 +98,12 @@ class Game(Window):
 
     def temp_button_func(self, func):
         """
-        Нажатие на временную кнопку должно стирать все временные кнопки
+        Добавляет в функцию изменение флага, за которым должны стираться все временные кнопки
         """
-        func()
-        self.temp_buttons_chosen = True
+        def func_with_changing_flag():
+            func()
+            self.temp_buttons_chosen = True
+        return func_with_changing_flag
 
     def update(self):
         super().update()
@@ -114,7 +114,12 @@ class Game(Window):
             for control in self.temp_controls:
                 self.controls.remove(control)
             self.temp_controls.clear()
-
+        command = self.world.get_command()
+        if command and command != 'None':
+            self.view.add_command(command)
+        response = self.world.get_response()
+        if response and response != 'None':
+            self.view.add_response(response)
 
 
 class StartMenu(Window):
