@@ -119,7 +119,7 @@ class World:
                 self.current_location.objects.remove(picked_object)
             else:
                 self.formatted_command += "что-то, "
-                self.response += "но еще не решил что именно.
+                self.response += "но еще не решил что именно."
             
 
         else:
