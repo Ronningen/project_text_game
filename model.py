@@ -19,7 +19,7 @@ class Command():
         return self.name
 
 
-class World:
+class World():
     """
     Основной класс игры, содержащий в себе текущую сцену, информацию о прогрессе игрока, героя и предметы.
     """
@@ -119,7 +119,7 @@ class World:
                 self.current_location.objects.remove(picked_object)
             else:
                 self.formatted_command += "что-то, "
-                self.response += "но еще не решил что именно.
+                self.response += "но еще не решил что именно."
             
 
         else:
