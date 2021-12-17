@@ -142,12 +142,13 @@ class StartMenu(Window):
         """
         game = Game(self.screen, self.clock, model.World())
         game.mainloop()
-        self.world = None
-        if isinstance(self.world, model.World):
-            button_y = len(self.controls)*80
-            continue_button = view.Button(
-                screen, (10, button_y, screen.get_width() - 20, 60), self.continue_game, "Продолжить игру")
-            self.controls.append(continue_button)
+        if not self.continuing:
+            self.world = data.deserialise()
+            if isinstance(self.world, model.World) and self.world != model.World():
+                button_y = len(self.controls)*70 + 10
+                continue_button = view.Button(
+                    screen, (10, button_y, screen.get_width() - 20, 60), self.continue_game, "Продолжить игру")
+                self.controls.append(continue_button)
 
     def continue_game(self):
         """
@@ -158,10 +159,11 @@ class StartMenu(Window):
 
     def __init__(self, screen, clock) -> None:
         super().__init__(screen, clock)
-        self.world = None
-
+        self.world = data.deserialise()
+        self.continuing = False
         button_y = 10
-        if isinstance(self.world, model.World):
+        if isinstance(self.world, model.World) and self.world != model.World():
+            self.continuing = True
             continue_button = view.Button(
                 screen, (10, button_y, screen.get_width() - 20, 60), self.continue_game, "Продолжить игру")
             self.controls.append(continue_button)

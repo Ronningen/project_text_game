@@ -8,8 +8,7 @@ import model
 def deserialise() -> model.World:
     """Выгружает из системного файла world.saviour состояние мира и инициализирует его.
     returns: world в состоянии на момент последнего выхода из игры."""
-#    return None
-    if os.path.getsize('world.saviour') > 0:
+    if os.path.exists('world.saviour') and os.path.getsize('world.saviour') > 0:
         with open('world.saviour', 'rb') as f:
             world = pickle.load(f)
             return world
