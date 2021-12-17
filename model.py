@@ -160,20 +160,25 @@ class World():
         Голова болит.
         И все остальное...
         Надо попробовать открыть глаза.
-        (Напечатайте "оосмотреться")
         """  # ответ для записи в историю
+
+        def open_eyes():
+            self.formatted_command += """Это потребовало усилий, но у меня получилось."""
+            self.response += """(Введите "осмотреться")"""
+
         self.formatted_command = ""  # форматированная команда для записи с историю
-        self.command_list = []
+        self.command_list = [Command(open_eyes, "Открыть глаза.")]
 
-        self.locations = [Location("Какая-то темная комната.", [LocatedObject("крутой меч", "меч", "на стене")])]
-        self.doors = []
+        self.locations = [Location("Темная комната. Трудно понять, как давно тут кто-то был: слои пыли уже вековы, однако все кажется подозрительно живым", [
+                                        LocatedObject("почему-то знакомый дневник", "дневник", "на полу"),
+                                        LocatedObject("странная картина", "картин", "на стене"),
+                                        LocatedObject("какой-то ржавый бесполезный меч", "меч", "в углу"),
+                                        LocatedObject("Короткий меч", "меч", "на стене")
+                        ])]
+        self.current_location = self.locations[0]
 
-        self.hero = []
         self.inventory = []
 
-        self.current_location = self.locations[0]
-        self.current_doors = []
-        # FIXME
 
 
 class GameObject():
@@ -226,7 +231,8 @@ class Location(GameObject):
         if len(self.objects) > 0:
             full_description += " В ней есть: "
             for o in self.objects:
-                full_description += o.get_description() + " " + o.get_place()
+                full_description += o.get_description().lower() + " " + o.get_place().lower() + ", "
+            full_description += "да и все."
         return full_description
 
 

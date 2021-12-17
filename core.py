@@ -10,7 +10,6 @@ import model
 import data
 
 
-
 class Window:
     """
     Базовый класс, управляющий активным окном pygame.
