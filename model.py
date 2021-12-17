@@ -83,12 +83,22 @@ class World():
         elif check_one("осмотр"):
             self.formatted_command += "Я решил осмотреться."
             self.response += self.current_location.get_description()
+            if self.tutor:
+                self.response += """"\n Дневник меня заинтересовал и я решил его поднять. \n (Введите "взять дневник")"""
 
         elif check_one("аааааааа"):
             self.formatted_command += "Я закричал от отчаяния."
             self.response += "К сожалению, крик услышали не только стены: я слышу чьи-то быстрые шаги - оно приближается."
             self.command_list = [Command(run, "убежать."),
                             Command(fight, "готовиться к битве."),]
+
+        elif check_one("взя", "подн", "схват", "бра") and self.tutor and check_one("дневн"):
+            self.formatted_command += "Я подобрал и пролистал дневник."
+            self.response += """Он оказался совершенно пустым, разве что был подписан:
+                                 <супер интрегующее имя>.
+                                 Это имя отозвалось резкой болью в черепной коробке. Я понял, что ничего не помню...
+                                 Захотелось закричать от всей души."""
+            self.tutor = False
 
         elif check_one("взя", "подн", "схват", "бра"):
             self.formatted_command += "Я решил подобрать "
@@ -176,8 +186,8 @@ class World():
                                         LocatedObject("Короткий меч", "меч", "на стене")
                         ])]
         self.current_location = self.locations[0]
-
         self.inventory = []
+        self.tutor = True
 
 
 
