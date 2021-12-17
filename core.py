@@ -30,7 +30,6 @@ class Window:
         if event.type == pygame.MOUSEBUTTONDOWN:
             for button in self.controls:
                 if type(button) == view.Button:
-                    print(view.Button)
                     button.call_action()
 
     def update(self):
