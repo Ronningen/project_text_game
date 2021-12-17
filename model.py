@@ -103,7 +103,7 @@ class World():
         elif check_one("взя", "подн", "схват", "бра"):
             self.formatted_command += "Я решил подобрать "
             objects = self.current_location.objects
-            picked_object = ""
+            picked_object = "empty"
             for object in objects:
                 marker = object.get_marker()
                 if check_one(marker):
@@ -116,13 +116,14 @@ class World():
                             if check_one(marked_object.get_place()):
                                 picked_object = marked_object
                                 break
-                        if picked_object != "":
+                        if picked_object != "empty":
                             break
                         self.formatted_command += marker + ","
                         self.response += "но не определился конкретно. Надо тщательнее выбрать."
+                        picked_object = "wrong"
                     else:
                         picked_object = object
-            if picked_object != "":
+            if picked_object != "empty" and picked_object != "wrong":
                 self.formatted_command += picked_object.get_description() + "."
                 self.response += "Буду носить его с собой."
                 self.inventory.append(picked_object.delocate())
