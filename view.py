@@ -80,9 +80,10 @@ class GameView:
         """
         new_textlines = self.distribute_text(response_text)
         self.textlines += new_textlines
+        self.textlines += "\n"
         while len(self.textlines) > textlines_number:
             self.textlines.pop(0)
-        # FIXME
+
 
     def blit_input_text(self, input_text):
         textlines_surface = FONT.render(input_text, 1, (0, 255, 0))
