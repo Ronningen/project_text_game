@@ -21,6 +21,7 @@ class Window:
         self.screen = screen
         self.clock = clock
         self.controls = []
+        self.FPS = 30
 
     def handle(self, event):
         """
@@ -48,7 +49,7 @@ class Window:
         """
         finished = False
         while not finished:
-            clock.tick(30)
+            clock.tick(self.FPS)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     finished = True
@@ -74,7 +75,7 @@ class Game(Window):
     def handle(self, event):
         super().handle(event)
         if event.type == pygame.QUIT:
-            data.serialise(self.world)
+            pass
         elif not self.temp_buttons_active and event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
                 if not self.input_text == '':

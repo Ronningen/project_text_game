@@ -4,7 +4,7 @@
 import pygame
 
 WIDTH, HEIGHT = 800, 600
-FONT = pygame.font.SysFont("Arial", 20)
+FONT = pygame.font.SysFont("Arial Black", 20)
 textlines_number = 20
 text_screen_portion = .8
 textlines_width = WIDTH
@@ -85,7 +85,7 @@ class GameView:
         # FIXME
 
     def blit_input_text(self, input_text):
-        textlines_surface = FONT.render(input_text, 1, (255,255,255))
+        textlines_surface = FONT.render(input_text, 1, (0, 255, 0))
         topleft = (0, textlines_height*(textlines_number + 1))
         textlines_rect = textlines_surface.get_rect(topleft = topleft)
         self.screen.blit(textlines_surface, textlines_rect)
