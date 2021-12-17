@@ -75,7 +75,7 @@ class Game(Window):
     def handle(self, event):
         super().handle(event)
         if event.type == pygame.QUIT:
-            pass
+            data.serialise(self.world)
         elif not self.temp_buttons_active and event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
                 if not self.input_text == '':
