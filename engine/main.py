@@ -1,26 +1,9 @@
-import world
-import json
+from shell_iomanager import ShelllIOManager
+from json_savemanager import JSONSaveManager
+import scene
 
-class IOManager:
-    def __init__(self) -> None:
-        pass
-
-class TerminalIOManager(IOManager):
-    def __init__(self) -> None:
-        super().__init__()
-
-class FileManager:
-    def __init__(self) -> None:
-        pass
-
-    def load_level(level):
-        pass
-
-    def save():
-        pass
-
-io_manager = TerminalIOManager()
-file_manager = FileManager()
+io_manager = ShelllIOManager()
+file_manager = JSONSaveManager()
 
 while(True):
-    pass
+    break
